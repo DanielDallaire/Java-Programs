@@ -14,6 +14,45 @@ public class Matrix{
 		this.entries = new int[m][n];
 	}
 	
+	public void rowOpAdd(int i, int j, int a){
+		for(int col = 0; col < this.n; col++){
+			this.entries[i-1][col] += a*this.entries[j-1][col];
+		}
+	}
+	
+	public void rowOpExc(int i, int j){
+		int temp;
+		for(int col = 0; col < this.n; col++){
+			temp = this.entries[i-1][col];
+			this.entries[i-1][col] = this.entries[j-1][col];
+			this.entries[j-1][col] = temp;
+		}
+	}
+	
+	public void rowOpMult(int i, int a){
+		for(int col = 0; col < this.n; col++){
+			this.entries[i-1][col] *= a;
+		}
+	}
+	
+	public Matrix multiply(Matrix B){
+		
+		Matrix AB = new Matrix(this.m, B.getCols());
+		
+		int val;
+		for(int row = 0; row < AB.getRows(); row++){
+			for(int col = 0; col < AB.getCols(); col++){
+				val = 0;
+				for(int i = 0; i < this.n; i++){
+					val += this.entries[row][i]*B.getEntry(i+1, col+1);
+				}
+				AB.setEntry(row+1, col+1, val);
+			}
+		}
+		
+		return AB;
+	}
+	
 	public int determinant(){
 		if(this.m == 1) 
 			return this.entries[0][0];
